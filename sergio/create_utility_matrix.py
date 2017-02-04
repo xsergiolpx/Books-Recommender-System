@@ -4,9 +4,7 @@
 import pandas as pd
 from scipy.sparse import coo_matrix
 from export_import import *
-
 import numpy as np
-from sklearn.metrics.pairwise import cosine_similarity
 
 # Load the dataframe
 #df = pd.read_csv("ratings-sample.csv", sep=";", encoding = "ISO-8859-1")
@@ -33,6 +31,7 @@ dic = {}
 users_size = len(users)
 counter = 0
 for user in users:
+    # nice counter
     print(round(counter/users_size*100), "%")
     counter += 1
 
@@ -46,12 +45,13 @@ for user in users:
     dic[user] = {books_user[i]: ratings_user[i] for i in range(len(books_user))}
 
 # create sparse utility matrix (users in rows, books in columns)
-#inizialize
+#inizialize it
 A = coo_matrix(([0], ([0], [0])), shape=(len(users), len(books)))
 
 counter = 0
 # create the utility matrix
 for i in range(len(users)):
+    # nice counter
     print(round(counter / users_size * 100), "%")
     counter += 1
     # create list of scores
@@ -66,10 +66,6 @@ for i in range(len(users)):
     # place them in the matrix
     A += coo_matrix((scores_list, (users_i, books_j)), shape=(len(users), len(books)))
 
-
-# to do, compute the cosine distance
-# similarity = cosine_similarity(A, dense_output=False)
-
 # Export the data
 export_matrix(A, "utility_matrix")
 export_dic(users_to_index, "users_to_index")
@@ -77,5 +73,5 @@ export_dic(index_to_users, "index_to_users")
 export_dic(books_to_index, "books_to_index")
 export_dic(index_to_books, "index_to_books")
 export_dic(dic, "dic_users_and_books")
-#print(similarity)
+
 print("Done")
