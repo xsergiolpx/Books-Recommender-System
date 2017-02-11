@@ -1,16 +1,14 @@
-import numpy as np
-import ast
 from math import log,sqrt
-from textblob import TextBlob as tb
-import pandas as pd
 from collections import Counter
+import sys
+import random
 
 
 def scalar(collection):
-  total = 0
-  for count in collection.values():
-    total += count * count
-  return sqrt(total)
+    total = 0
+    for count in collection.values():
+        total += count * count
+    return sqrt(total)
 
 
 def similarity(text_1,text_2):
@@ -26,23 +24,19 @@ def similarity(text_1,text_2):
         return 0
 
 
-def item_based_similarity(query_isbn, books):
+def get_k_similar(query_isbn, books, k=5, sample_size=2000):
     book1 = books.loc[query_isbn]
-    all_isbn = books.index
+    books = books.drop(query_isbn)
+    all_isbn = books.loc[books['Hashed-Genre'] == book1['Hashed-Genre']]
+    if len(all_isbn) >= sample_size:
+        all_isbn = all_isbn.sample(sample_size)
     sim_list = []
-    i = 0
-    for isbn in all_isbn:
-        print("Reading ",i," of ",len(all_isbn))
-        i+=1
-        book2 = books.loc[isbn]
+    for isbn in all_isbn.index:
+        book2 = all_isbn.loc[isbn]
 
         title_1 = book1['Book-Title']
         title_2 = book2['Book-Title']
         title_sim = similarity(title_1, title_2)
-
-        shelves_sim = 0
-        if book1.loc['Popular-Shelves'] == book2.loc['Popular-Shelves']:
-            shelves_sim = 1
 
         author_sim = 0
         if book1.loc['Book-Author'] == book2.loc['Book-Author']:
@@ -52,13 +46,17 @@ def item_based_similarity(query_isbn, books):
         if book1.loc['Year-Of-Publication'] == book2.loc['Year-Of-Publication']:
             year_sim = 1
 
-        total_sim = (2*title_sim + 4*author_sim + year_sim + 4*shelves_sim)/9
+        total_sim = (title_sim + 8*author_sim + 2*year_sim)/11
 
         sim_list.append((isbn,total_sim))
-    return sim_list
+    sim_list.sort(key=lambda tup: tup[1], reverse=True)
+    return sim_list[:k]
 
 
-books = pd.read_csv('../../data/processed_df (5th copy).csv', delimiter=';', encoding='utf-8', index_col='ISBN')
-sim_list = item_based_similarity('0375823468',books)
-sim_list.sort(key=lambda tup: tup[1], reverse=True)
-print(sim_list[0:12])
+def content_based_similarity(list_isbn, books):
+    k_similars = []
+    k = 5
+    for isbn in list_isbn:
+        k_similars = k_similars + get_k_similar(isbn, books, k=k, sample_size=1000)
+    k_similars.sort(key=lambda tup: tup[1], reverse=True)
+    return k_similars[:k]
