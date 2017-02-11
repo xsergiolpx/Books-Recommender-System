@@ -6,7 +6,6 @@ from nltk.corpus import stopwords
 import string
 import re
 from goodreads import client
-import numpy as np
 
 
 def hash_text(text):

@@ -1,7 +1,5 @@
 from math import log,sqrt
 from collections import Counter
-import sys
-import random
 
 
 def scalar(collection):
