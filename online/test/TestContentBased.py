@@ -22,7 +22,7 @@ def test_content_based_similarity(isbn_list):
 
     sim_list = cb.content_based_similarity(isbn_list, books)
 
-    print('\n')
+    print()
     print("You may also like:")
     for x in sim_list:
         print(book_names.loc[x[0]]['Book-Title'], '-- Similarity =', round(x[1],ndigits=3))
@@ -36,7 +36,8 @@ def main():
         isbn_list.append(isbn.strip())
     now = time.time()
     test_content_based_similarity(isbn_list)
-    print(round(time.time() - now, ndigits=2))
+    print()
+    print("Query processed in ", round(time.time() - now, ndigits=2), " seconds")
 
 
 if __name__ == '__main__':
