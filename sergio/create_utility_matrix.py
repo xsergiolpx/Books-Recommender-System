@@ -3,12 +3,17 @@
 
 import pandas as pd
 from scipy.sparse import coo_matrix
-from export_import import *
+from export_import_tools import *
 import numpy as np
 
 # Load the dataframe
 #df = pd.read_csv("ratings-sample.csv", sep=";", encoding = "ISO-8859-1")
 df = pd.read_csv("BX-Book-Ratings.csv", sep=";", encoding = "ISO-8859-1")
+
+# Drop reviews that are zero
+#df= df[df["Book-Rating"] != 0]
+# Drop users with only one review
+#df = df.groupby('User-ID').filter(lambda x: len(x) > 1)
 
 # List of users
 users = df["User-ID"].unique()
@@ -21,8 +26,8 @@ index_to_users = {i: users[i] for i in range(0,len(users))}
 books = df["ISBN"].unique()
 
 # Asign each book an index for the utility matrix
-books_to_index = {books[i]: i for i in range(0,len(books))}
-index_to_books = {i: books[i] for i in range(0,len(books))}
+books_to_index = {str(books[i]): i for i in range(0,len(books))}
+index_to_books = {i: str(books[i]) for i in range(0,len(books))}
 
 # create dictionary of the type
 # {user1: {book1: rating1, book2: rating2}, user2: {book1: rating1}}
