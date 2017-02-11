@@ -46,6 +46,4 @@ def download_name(isbn):
         return ""
 
 
-download_name("0446594342")
-
 
