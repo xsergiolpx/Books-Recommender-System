@@ -69,13 +69,7 @@ def item_based(books):
 
 
     # Show read books:
-    print("#### Item Based Recommendations ####")
-    print("\n--- You like:")
-
-    for book in books_j:
-        print(isbn_to_book[index_to_books[book]])
-
-    print("\n--- Then you might like:")
+    print("[Item Based]")
 
     counter = 1
     for i in range(len(sorted_book_and_scores)):

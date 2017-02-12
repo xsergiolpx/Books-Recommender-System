@@ -21,7 +21,7 @@ def books_common(user_idx, user, A):
 
 
 def cv_user_based(books):
-    print("#### User Based RMSE of scores ####")
+    print("[User Based] RMSE of scores")
     # Load isbn to book title:
     isbn_to_book = import_dic("data/collaborative_filtering/isbn_to_books")
 

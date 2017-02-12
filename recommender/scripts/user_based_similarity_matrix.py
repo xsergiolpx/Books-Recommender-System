@@ -77,12 +77,7 @@ def user_based(books):
     isbn_to_book = import_dic("data/collaborative_filtering/isbn_to_books")
 
     # Show read books:
-    print("#### User Based Recommendations ####")
-    print("\n--- You like:")
-    for book in books_j:
-        print(isbn_to_book[index_to_books[book]])
-
-    print("\n--- Then you might like:")
+    print("\n[User Based]")
 
     counter = 1
     for i in range(len(sorted_recommendations)):
