@@ -9,7 +9,7 @@ books = import_dic("data/association_rules/isbn_to_books")
 
 f = lambda x: books[x]
 
-print("[Association] Using Association rules")
+print("[Association Rules] Recommendations")
 print("--- You like: ")
 
 for x in entry.split(','):
