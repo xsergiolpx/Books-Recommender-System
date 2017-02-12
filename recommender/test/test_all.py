@@ -19,7 +19,7 @@ def test_content_based_similarity(isbn_list):
     books = pd.read_csv('data/content_based/processed_df.csv', delimiter=',', encoding='utf-8', index_col='ISBN')
     book_names = load_books(columns=['ISBN','Book-Title'])
 
-    content_based = cb.ContentBased(books=books, query_list_isbn=isbn_list, k=15, sample_size=2000)
+    content_based = cb.ContentBased(books=books, query_list_isbn=isbn_list, k=10, sample_size=2000)
     sim_list = content_based.get_similar_books()
 
     print()
@@ -46,9 +46,12 @@ for x in books:
 print()
 rules = read_rules("data/association_rules/rules_0.00012.csv")
 
-results = find_matches(rules, ','.join(books), query_type="ain")
+results = find_matches(rules, ','.join(books), query_type="all")
 
-for result in results:
+for i, result in enumerate(results):
+    if i>10:
+        break
+
     if result[5] == "in":
         print("[in] Book %s is recommended by: %s with support %0.2f confidence %0.2f and lift %0.2f" % (result[1],
                                                                                                     result[6],
