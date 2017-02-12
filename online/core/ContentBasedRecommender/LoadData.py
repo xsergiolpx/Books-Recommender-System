@@ -53,8 +53,8 @@ def process_book_name(orig_text):
     # creates the tokens
     text = word_tokenize(text)
 
-    # excludes tokens which contain numbers and punctuations
-    text = [t for t in text if bool(re.search(r'\d', t)) == False and t not in string.punctuation]
+    # excludes tokens which contain punctuations
+    text = [t for t in text if t not in string.punctuation]
 
     # Remove stopwords
     stopset = set(stopwords.words('english'))
@@ -143,13 +143,19 @@ def set_genre_googlebooks(books):
     save_processed_dataframe(books)
 
 
+def correct_year(x):
+    if x > 2017:
+        x = 0
+    return x
+
+
 def build_processed_content_based_dataframe():
     books = load_books()
     books['Year-Of-Publication'] = books['Year-Of-Publication'].apply(lambda x: int(x))
-    books['Year-Of-Publication'].replace(to_replace=0, value=books['Year-Of-Publication'].mean(), inplace=True)
-    books['Year-Of-Publication'] = (books['Year-Of-Publication'] - books['Year-Of-Publication'].mean())/books['Year-Of-Publication'].std()
+    books['Year-Of-Publication'] = books['Year-Of-Publication'].apply(lambda x: correct_year(x))
+    books['Year-Of-Publication'].replace(to_replace=0, value=books['Year-Of-Publication'].mean(),inplace=True)
+    books['Year-Of-Publication'] = books['Year-Of-Publication'].apply(lambda x: int(x))
     books['Book-Title'] = books['Book-Title'].apply(lambda x: process_book_name(x))
-    books = books.round(3)
     return books
 
 
