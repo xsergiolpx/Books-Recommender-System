@@ -1,8 +1,8 @@
-from online.core.utils.export_import_tools import file_to_list
-from online.scripts.item_based_similarity_matrix import item_based
-from online.scripts.user_based_similarity_matrix import user_based
-from online.scripts.cross_validation_item_based import cv_item_based
-from online.scripts.cross_validation_user_based import cv_user_based
+from recommender.core.utils.export_import_tools import file_to_list
+from recommender.scripts.item_based_similarity_matrix import item_based
+from recommender.scripts.user_based_similarity_matrix import user_based
+from recommender.scripts.cross_validation_item_based import cv_item_based
+from recommender.scripts.cross_validation_user_based import cv_user_based
 import sys
 
 # load books to list

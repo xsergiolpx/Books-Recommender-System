@@ -1,11 +1,11 @@
 import time
-import online.core.collaborative_filtering.DictionaryController as dc
-import online.core.collaborative_filtering.ItemBasedCollaborativeFiltering as ib
+import recommender.core.collaborative_filtering.DictionaryController as dc
+import recommender.core.collaborative_filtering.ItemBasedCollaborativeFiltering as ib
 
 
 def test_item_based_similarity():
-    isbn_dict = dc.load_dict_json('/online/data/isbn_dict.json')
-    users_dict = dc.load_dict_json('/online/data/users_dict.json')
+    isbn_dict = dc.load_dict_json('/recommender/data/isbn_dict.json')
+    users_dict = dc.load_dict_json('/recommender/data/users_dict.json')
 
     before = time.time()
 
@@ -28,7 +28,7 @@ def test_build_isbn_dictionary():
 
 
 def test_build_users_dictionary():
-    isbn_dict = dc.load_dict_json('/online/data/isbn_dict.json')
+    isbn_dict = dc.load_dict_json('/recommender/data/isbn_dict.json')
     start_time = time.time()
     users_dict = dc.build_users_dictionary(isbn_dict)
     dc.save_dict_json(users_dict, 'test_users_dict.json')

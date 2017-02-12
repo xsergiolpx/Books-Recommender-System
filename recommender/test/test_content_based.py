@@ -1,5 +1,5 @@
-from online.core.content_based import ContentBased as cb
-from online.core.utils.export_import_tools import load_books
+from recommender.core.content_based import ContentBased as cb
+from recommender.core.utils.export_import_tools import load_books
 import time
 import sys
 import pandas as pd
