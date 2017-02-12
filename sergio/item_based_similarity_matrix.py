@@ -13,16 +13,15 @@ total_users = A.shape[1]
 total_books = A.shape[0]
 
 # load some books
-books = ["0671723650"]
+#books = ["0195153448", "0094770506", "1883219116"]
 
 #Harry Potter books
-#books = [ "0439567610", "0747545111", "0613496744", "0312282540"]
-
+books = [ "0439567610", "0747545111", "0613496744", "0312282540"]
 # Pippi books
-books = ["0140309578", "0140327738", "0140309586", "0140309594", "0590016555"]
+#books = ["0140309578", "0140327738", "0140309586", "0140309594", "0590016555"]
 
 # Narnia
-books += ["0590257889", "0020444206", "0590257889", "0020444303", "0020444907"]
+#books = ["0590257889", "0020444206", "0590257889", "0020444303", "0020444907"]
 
 #Load the list of books
 books_to_index = import_dic("books_to_index")
@@ -35,9 +34,6 @@ for book in books:
         books_j.append(books_to_index[book])
     except KeyError:
         print(book, "not found in database")
-    #books_j = [books_to_index[book] for book in books]
-
-print(books_j)
 
 # store the book index and score in a dic
 book_and_scores = {}
@@ -48,15 +44,14 @@ for book in books_j:
     # calculate the similarity of books
     similarity = cosine_similarity(A,book_vector, dense_output=False)
     similarity_books_index, _, similarity_score = find(similarity)
-    # select the top 5 books and store their local index of the previous array
-    books_similar = 6
+    # select the top 6 books and store their local index of the previous array
+    books_similar = min(6, len(similarity_score))
     ind = np.argpartition(similarity_score, -books_similar)[-books_similar:]
     # get the book index
     books_indices = similarity_books_index[ind]
 
     #select the similarities ratings
     similarity_selected_books = similarity_score[ind]
-    #print(similarity_score[ind])
 
     #compute the average rating of each book of the selected ones
     # with the weight of the similarity
@@ -64,11 +59,15 @@ for book in books_j:
         j = books_indices[jj]
         score = similarity_selected_books[jj]
         _, _, score_book_j = find(A[j,:])
-        book_and_scores[j] = np.mean(score_book_j)*score
+        book_and_scores[j] = np.mean(score_book_j)*score/10
+
+        '''
+        # Uncomment to see the similarity values
         try:
             print(score, isbn_to_book[index_to_books[j]], isbn_to_book[index_to_books[book]])
         except Exception:
             pass
+        '''
 
 # sort by scores
 import operator
@@ -91,9 +90,10 @@ for i in range(len(sorted_book_and_scores)):
     try:
         if isbn not in books: # check the book is not in the input list
             recommended_book = isbn_to_book[isbn]
-            print(recommended_book,"(predicted score", sorted_book_and_scores[i][1], ")")
+            print(recommended_book,"(pseudoscore", round(sorted_book_and_scores[i][1], 2), ")")
             counter += 1
     except KeyError: # the isbn is not in the data set mapped to a title, get it from the internet
         name = download_name(isbn)
         if len(name) > 0:
-            print(name,"(predicted score", sorted_book_and_scores[i][1], ")")
+            print(name,"(pseudoscore", round(sorted_book_and_scores[i][1], 2), ")")
+            counter +=1

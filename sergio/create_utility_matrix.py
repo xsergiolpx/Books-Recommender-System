@@ -7,7 +7,6 @@ from export_import_tools import *
 import numpy as np
 
 # Load the dataframe
-#df = pd.read_csv("ratings-sample.csv", sep=";", encoding = "ISO-8859-1")
 df = pd.read_csv("BX-Book-Ratings.csv", sep=";", encoding = "ISO-8859-1")
 
 # Drop reviews that are zero

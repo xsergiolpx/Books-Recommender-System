@@ -15,5 +15,4 @@ isbn_to_books = {isbn[i]: books[i] for i in range(len(isbn))}
 # save
 export_dic(isbn_to_books, "isbn_to_books")
 
-libros = import_dic("index_to_books")
-print(libros)
+print("Done")

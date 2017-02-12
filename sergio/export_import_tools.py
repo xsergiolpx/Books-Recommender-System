@@ -43,9 +43,7 @@ def download_name(isbn):
         soup = BeautifulSoup(result.content, "lxml")
         return soup.find_all(style="font-size: 0.9em;")[0].text
     else:
-        return ""
+        return ""#isbn
 
-
-download_name("0446594342")
 
 

@@ -6,6 +6,9 @@ import numpy as np
 A = import_matrix("utility_matrix")
 total_users = A.shape[0]
 total_books = A.shape[1]
+
+#books = ["0195153448", "0094770506", "1883219116"]
+
 #Harry Potter books
 books = [ "0439567610", "0747545111", "0613496744", "0312282540"]
 
@@ -49,8 +52,8 @@ similarity = cosine_similarity(A,B, dense_output=False)
 # put in array form
 similarity_users_index, _, similarity_score = find(similarity)
 
-# find the indices (inside the array) of the maximum 10 similarities
-number_of_similar_users = np.sum(similarity_score > 0.05)
+# find the indices (inside the array) of the maximum 5 similarities
+number_of_similar_users = min(len(similarity_score), 5)
 #print(similarity_score)
 
 ind = np.argpartition(similarity_score, -number_of_similar_users)[-number_of_similar_users:]
@@ -66,7 +69,7 @@ for j in range(len(similar_users_real_index)):
     sim = similarity_score[ind][j]/max(similarity_score)
     _, similar_books_index, similar_books_rating = find(A[i])
     #normalize the rating of the book and add the sim
-    similar_books_rating = sim+similar_books_rating/similar_books_rating
+    similar_books_rating = (sim+similar_books_rating/10)/2
     # create the dict
     for j in range(len(similar_books_index)):
         if similar_books_index[j] not in books_j:
@@ -77,8 +80,7 @@ for j in range(len(similar_users_real_index)):
 
 # Modify the dict to get the average of the books ratings
 for book in recommendations:
-    #print(len(recommendations[book]))
-    recommendations[book] = np.median(recommendations[book])# + len(recommendations[book])**0.6
+    recommendations[book] = np.median(recommendations[book]) + len(recommendations[book])**0.5
 
 
 # sort books by best
@@ -98,13 +100,13 @@ print("\n--- Then you might like:")
 
 counter = 1
 for i in range(len(sorted_recommendations)):
-    if counter > 30:
+    if counter > 5:
         break
     book_index = sorted_recommendations[i][0]
     try:
         isbn = index_to_books[book_index]
         recommended_book = isbn_to_book[isbn]
-        print(recommended_book, sorted_recommendations[i][1])
+        print(recommended_book, "(pseudoscore", round(sorted_recommendations[i][1],2), ")")
         counter += 1
     except KeyError:
         pass
