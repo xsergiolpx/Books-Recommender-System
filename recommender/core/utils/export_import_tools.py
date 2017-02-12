@@ -44,7 +44,7 @@ def download_name(isbn):
         soup = BeautifulSoup(result.content, "lxml")
         return soup.find_all(style="font-size: 0.9em;")[0].text
     else:
-        return ""#isbn
+        return str(isbn)
 
 
 def load_books(filename='data/input/BX-Books.csv', columns=['ISBN','Book-Title','Book-Author','Year-Of-Publication']):
