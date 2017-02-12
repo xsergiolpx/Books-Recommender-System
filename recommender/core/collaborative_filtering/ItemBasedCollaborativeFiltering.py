@@ -2,7 +2,7 @@ import pandas as pd
 import numpy as np
 from scipy.sparse import coo_matrix
 from sklearn.metrics.pairwise import cosine_similarity
-import online.core.collaborative_filtering.DictionaryController as dc
+import recommender.core.collaborative_filtering.DictionaryController as dc
 from scipy import io
 
 
