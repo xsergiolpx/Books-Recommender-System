@@ -74,7 +74,6 @@ def find_matches(rules, lhs, query_type="ain"):
 
     for result in results:
         if result[1] not in interest:
-            print(result[1], books[result[1]])
             interest.add(result[1])
             result[1] = books[result[1]]
             retrieve.append(result)
