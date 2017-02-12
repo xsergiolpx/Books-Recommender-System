@@ -4,16 +4,19 @@ from scipy.sparse import csr_matrix, find
 import numpy as np
 
 
-def books_common(user_idx, books_idx, A):
+def books_common(user_idx, user, A):
     '''
     :param user_idx: 894357943
-    :param books_idx: [34534, 345234, 43, 2]
+    :param user: 34534334
     :param A: sparse matrix
-    :return: books that user has read from the books_idx list and their ratings in a dict like
+    :return: books that both users have read with scores of the second
         {"324523": 9, "2342", 4}
     '''
-    books_local_index, _, rat = find(A[books_idx, user_idx])
-    return {books_idx[books_local_index[j]]: rat[j] for j in range(len(books_local_index))}
+    _ , books_first_user,_ = find(A[user_idx,:])
+    _, books_second_user, _ = find(A[user,:])
+    common_books =list(set(books_first_user).intersection(set(books_second_user)))
+    _, local_index, rat = find(A[user,common_books])
+    return {common_books[local_index[j]]: rat[j] for j in range(len(local_index))}
 
 
 
@@ -43,66 +46,38 @@ def cv_user_based(books):
     book_and_scores = {}
     # run over all the books
     for book in books_j:
+        rmse = []
         # take the vector of the book, each component is a rating from a user
         book_vector = A[:, book]
         # see who read that book
-        _, users_idx, _ = find(book_vector)
-        for user_idx in users_idx:
+        users_idx,_, scores_real = find(book_vector)
+        # create a dict of users and scores real
+        users_scores_real = { users_idx[k]: scores_real[k] for k in range(len(users_idx))}
+        for user_idx in users_scores_real:
             user_vector = A[user_idx, :]
-            print(user_vector)
-            exit()
+            similarity = cosine_similarity(A, user_vector, dense_output=False)
+            similarity_users_index, _, similarity_score = find(similarity)
+            users_similar = min(5, len(similarity_score))
+            ind = np.argpartition(similarity_score, -users_similar)[-users_similar:]
+            # get the users index
+            users_indices = similarity_users_index[ind]
+            # select the similarities ratings
+            similarity_selected_users = similarity_score[ind]
 
+            similarity_selected_users_dic = {}
+            for k in range(len(similarity_selected_users)):
+                similarity_selected_users_dic[users_indices[k]] = similarity_selected_users[k]
 
-
-
-
-
-        user_rating_real = {}
-        # create a dict of real ratings for the book
-        for k in range(len(users_idx)):
-            user_rating_real[users_idx[k]] = ratings[k]
-
-        # calculate the similarity of books
-        similarity = cosine_similarity(A, book_vector, dense_output=False)
-        similarity_books_index, _, similarity_score = find(similarity)
-
-        # select the top 6 books and store their local index of the previous array
-        books_similar = min(6, len(similarity_score))
-        ind = np.argpartition(similarity_score, -books_similar)[-books_similar:]
-        # get the book index
-        books_indices = similarity_books_index[ind]
-
-        # select the similarities ratings
-        similarity_selected_books = similarity_score[ind]
-
-        # similarity dict of books with the book_j
-        similarity_selected_books_dic = {}
-        for k in range(len(similarity_selected_books)):
-            similarity_selected_books_dic[books_indices[k]] = similarity_selected_books[k]
-
-        # store here abs(expected_rating-real_rating)
-        all_differences_predicted_real_ratings = []
-
-        # predict the score for each user of the book of this loop
-        for user in user_rating_real:
-            # check books in common that users has rated and are recomended in the top 6
-            common_books_dic = books_common(user, books_indices, A)
-
-            # if there are more than 1 book in common proceed
-            if len(common_books_dic) > 1:
-                # apply formula of
-                # http://cs229.stanford.edu/proj2008/Wen-RecommendationSystemBasedOnCollaborativeFiltering.pdf
-                # page 2 bottom
-                sum_numerator = 0
-                sum_denominator = 0
-                for key in common_books_dic.keys():
-                    sum_numerator += common_books_dic[key] * similarity_selected_books_dic[key]
-                    sum_denominator += np.abs(similarity_selected_books_dic[key])
-                # add to the list the difference
-                all_differences_predicted_real_ratings.append(
-                    (sum_numerator / sum_denominator - user_rating_real[user]) ** 2)
-        print("RMSE of ", isbn_to_book[index_to_books[book]], ":",
-              round(np.sqrt(np.mean(all_differences_predicted_real_ratings)), 1))
+            for user in similarity_selected_users_dic:
+                common = books_common(user_idx, user, A)
+                numerator = 0
+                denom = 0
+                if len(common) > 1:
+                    for book_in_common in common:
+                        numerator += similarity_selected_users_dic[user]*common[book_in_common]
+                        denom += np.abs(similarity_selected_users_dic[user])
+                    rmse.append((numerator/denom-users_scores_real[user_idx])**2)
+        print("RMSE of ", isbn_to_book[index_to_books[book]], ":", round(np.sqrt(np.mean(rmse)),1))
 
 
 

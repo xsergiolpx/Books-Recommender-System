@@ -8,17 +8,21 @@ from cross_validation_user_based import cv_user_based
 books = file_to_list("isbns.txt")
 
 # item based
-#item_based(books)
+item_based(books)
 
-#print("\nPress enter to continue\n")
-#input()
+print("\nPress enter to continue\n")
+input()
 
 # cross validation
-cv_user_based(books)
-exit()
+cv_item_based(books)
 print("\nPress enter to continue\n")
 input()
 
 #user based
 user_based(books)
 
+print("\nPress enter to continue\n")
+input()
+
+# cross validation
+cv_user_based(books)
