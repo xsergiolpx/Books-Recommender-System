@@ -13,12 +13,12 @@ def hash_text(text):
     return int(h.hexdigest(), base=16)
 
 
-def load_books(filename='../../../BX-CSV-Dump/BX-Books.csv', columns=['ISBN','Book-Title','Book-Author','Year-Of-Publication']):
+def load_books(filename='data/input/BX-Books.csv', columns=['ISBN','Book-Title','Book-Author','Year-Of-Publication']):
     return pd.read_csv(filename, delimiter=';', encoding='ISO-8859-1', index_col='ISBN',
                         usecols=columns)
 
 
-def save_processed_dataframe(books, filename='../../data/processed_df.csv'):
+def save_processed_dataframe(books, filename='data/content_based/processed_df.csv'):
     with open(filename, "w") as fp:
         books.to_csv(fp)
     fp.close()
@@ -111,7 +111,7 @@ def set_genre_goodreads(books):
     save_processed_dataframe(books)
 
 
-def search_googlebooks(self, isbn):
+def search_googlebooks(isbn):
     googleapikey = "AIzaSyCk8G1jzmc3ir982I7hqZ-9Y3hYs6u13Wk"
     url = "https://www.googleapis.com/books/v1/volumes?q=isbn="+isbn+"&key="+googleapikey
     try:
@@ -161,7 +161,7 @@ def build_processed_content_based_dataframe():
 
 books = build_processed_content_based_dataframe()
 save_processed_dataframe(books)
-books = pd.read_csv('../../data/processed_df.csv', delimiter=',', encoding='utf-8', index_col='ISBN')
+books = pd.read_csv('data/content_based/processed_df.csv', delimiter=',', encoding='utf-8', index_col='ISBN')
 set_genre_goodreads(books)
-books = pd.read_csv('../../data/processed_df.csv', delimiter=',', encoding='utf-8', index_col='ISBN')
+books = pd.read_csv('/data/content_based/processed_df.csv', delimiter=',', encoding='utf-8', index_col='ISBN')
 set_genre_googlebooks()

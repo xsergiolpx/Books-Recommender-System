@@ -49,3 +49,5 @@ def test_get_most_rated():
             most_read = (k, len(isbn_dict[k]))
             break
     print(most_read)
+
+test_get_most_rated()

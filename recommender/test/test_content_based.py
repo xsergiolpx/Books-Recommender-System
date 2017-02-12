@@ -1,4 +1,4 @@
-from online.core.ContentBasedRecommender import ContentBased as cb
+from online.core.content_based import ContentBased as cb
 from online.core.utils.export_import_tools import load_books
 import time
 import sys
@@ -13,7 +13,7 @@ from goodreads import client
 
 
 def test_content_based_similarity(isbn_list):
-    books = pd.read_csv('data/processed_df.csv', delimiter=',', encoding='utf-8', index_col='ISBN')
+    books = pd.read_csv('data/content_based/processed_df.csv', delimiter=',', encoding='utf-8', index_col='ISBN')
     book_names = load_books(columns=['ISBN','Book-Title'])
 
     print("You have seached for:")

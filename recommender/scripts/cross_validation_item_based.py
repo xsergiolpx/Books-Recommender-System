@@ -1,4 +1,4 @@
-from export_import_tools import *
+from online.core.utils.export_import_tools import import_dic, import_matrix
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.sparse import csr_matrix, find
 import numpy as np
@@ -20,16 +20,16 @@ def books_common(user_idx, books_idx, A):
 def cv_item_based(books):
     print("#### Item Based RMSE of scores ####")
     # Load isbn to book title:
-    isbn_to_book = import_dic("isbn_to_books")
+    isbn_to_book = import_dic("data/collaborative_filtering/isbn_to_books")
 
     # load the utility sparse matrix
-    A = import_matrix("utility_matrix_prepared_item_based")
+    A = import_matrix("data/collaborative_filtering/utility_matrix_prepared_item_based")
     total_users = A.shape[1]
     total_books = A.shape[0]
 
     #Load the list of books
-    books_to_index = import_dic("books_to_index")
-    index_to_books = import_dic("index_to_books")
+    books_to_index = import_dic("data/collaborative_filtering/books_to_index")
+    index_to_books = import_dic("data/collaborative_filtering/index_to_books")
 
     # Change them to indices
     books_j = []

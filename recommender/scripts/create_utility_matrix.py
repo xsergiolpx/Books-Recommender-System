@@ -3,11 +3,11 @@
 
 import pandas as pd
 from scipy.sparse import coo_matrix
-from export_import_tools import *
+from online.core.utils.export_import_tools import export_matrix, export_dic
 import numpy as np
 
 # Load the dataframe
-df = pd.read_csv("BX-Book-Ratings.csv", sep=";", encoding = "ISO-8859-1")
+df = pd.read_csv("data/input/BX-Book-Ratings.csv", sep=";", encoding = "ISO-8859-1")
 
 # Drop reviews that are zero
 #df= df[df["Book-Rating"] != 0]
@@ -71,11 +71,11 @@ for i in range(len(users)):
     A += coo_matrix((scores_list, (users_i, books_j)), shape=(len(users), len(books)))
 
 # Export the data
-export_matrix(A, "utility_matrix")
-export_dic(users_to_index, "users_to_index")
-export_dic(index_to_users, "index_to_users")
-export_dic(books_to_index, "books_to_index")
-export_dic(index_to_books, "index_to_books")
-export_dic(dic, "dic_users_and_books")
+export_matrix(A, "data/collaborative_filtering/utility_matrix")
+export_dic(users_to_index, "data/collaborative_filtering/users_to_index")
+export_dic(index_to_users, "data/collaborative_filtering/index_to_users")
+export_dic(books_to_index, "data/collaborative_filtering/books_to_index")
+export_dic(index_to_books, "data/collaborative_filtering/index_to_books")
+export_dic(dic, "data/collaborative_filtering/dic_users_and_books")
 
 print("Done")

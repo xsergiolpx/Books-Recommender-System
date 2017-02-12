@@ -18,11 +18,11 @@ def build_users_dictionary(isbn_dict):
     return users_dict
 
 
-def build_isbn_dictionary(filename="/BX-CSV-Dump/BX-Book-Ratings.csv", save_freq=300):
+def build_isbn_dictionary(filename="/data/input/BX-Book-Ratings.csv", save_freq=300):
     df = pd.read_csv(filename, delimiter=';', encoding='ISO-8859-1', index_col='ISBN')
     df.sort_index(inplace=True)
 
-    old_dict = load_dict_json('isbn_dict.json')
+    old_dict = load_dict_json('data/content_based/isbn_dict.json')
     books = list(set(df.index) - set(old_dict.keys()))   # list of all ISBNs/books not already processed
     new_dict = {}
     i = 0
@@ -33,7 +33,7 @@ def build_isbn_dictionary(filename="/BX-CSV-Dump/BX-Book-Ratings.csv", save_freq
         b_values = df.loc[[b]].values
         new_dict[b] = {str(key): str(value) for (key, value) in b_values}
         if i%save_freq == 0:
-            save_dict_json(merge_dict(old_dict, new_dict), 'isbn_dict.json')
+            save_dict_json(merge_dict(old_dict, new_dict), 'data/content_based/isbn_dict.json')
     return merge_dict(old_dict, new_dict)
 
 
