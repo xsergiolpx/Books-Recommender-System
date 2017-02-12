@@ -2,7 +2,7 @@ import random
 
 import pandas as pd
 
-from online.core.collaborative_filtering import ItemBasedCollaborativeFiltering as sc
+from recommender.core.collaborative_filtering import ItemBasedCollaborativeFiltering as sc
 
 
 def load_sample_data(filename, size):
