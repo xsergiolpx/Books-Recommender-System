@@ -1,4 +1,4 @@
-from online.core.utils.export_import_tools import import_matrix, export_matrix
+from recommender.core.utils.export_import_tools import import_matrix, export_matrix
 
 # Load the matrix
 A = import_matrix("data/collaborative_filtering/utility_matrix")

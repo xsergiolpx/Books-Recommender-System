@@ -1,4 +1,4 @@
-from online.core.utils.export_import_tools import export_dic
+from recommender.core.utils.export_import_tools import export_dic
 import pandas as pd
 
 

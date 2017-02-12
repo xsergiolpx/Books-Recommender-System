@@ -1,4 +1,4 @@
-from online.core.utils.export_import_tools import import_matrix, import_dic
+from recommender.core.utils.export_import_tools import import_matrix, import_dic
 from sklearn.metrics.pairwise import cosine_similarity
 from scipy.sparse import csr_matrix, find
 import numpy as np

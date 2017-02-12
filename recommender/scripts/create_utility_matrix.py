@@ -3,7 +3,7 @@
 
 import pandas as pd
 from scipy.sparse import coo_matrix
-from online.core.utils.export_import_tools import export_matrix, export_dic
+from recommender.core.utils.export_import_tools import export_matrix, export_dic
 import numpy as np
 
 # Load the dataframe
