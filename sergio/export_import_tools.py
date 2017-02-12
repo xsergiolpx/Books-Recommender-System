@@ -46,4 +46,14 @@ def download_name(isbn):
         return ""#isbn
 
 
-
+def file_to_list(filename):
+    '''
+    Load a a file and returns a list where each element is each line of the file
+    :param filename:
+    :return:
+    '''
+    with open(filename, "r") as ins:
+        array = []
+        for line in ins:
+            array.append(line.replace("\n", ""))
+    return array
