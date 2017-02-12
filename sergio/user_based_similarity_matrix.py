@@ -23,11 +23,6 @@ def user_based(books):
             books_j.append(books_to_index[book])
         except KeyError:
             print(book, "not found in database")
-        #books_j = [books_to_index[book] for book in books]
-
-
-
-    #print(books_j)
 
     # Create vector of 10 because the book is liked a lot
     scores_list = np.repeat(10, len(books_j))
@@ -48,7 +43,6 @@ def user_based(books):
 
     # find the indices (inside the array) of the maximum 5 similarities
     number_of_similar_users = min(len(similarity_score), 5)
-    #print(similarity_score)
 
     ind = np.argpartition(similarity_score, -number_of_similar_users)[-number_of_similar_users:]
 

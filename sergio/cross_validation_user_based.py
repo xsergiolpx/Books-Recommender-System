@@ -17,17 +17,17 @@ def books_common(user_idx, books_idx, A):
 
 
 
-def cv_item_based(books):
-    print("#### Item Based RMSE of scores ####")
+def cv_user_based(books):
+    print("#### User Based RMSE of scores ####")
     # Load isbn to book title:
     isbn_to_book = import_dic("isbn_to_books")
 
     # load the utility sparse matrix
-    A = import_matrix("utility_matrix_prepared_item_based")
+    A = import_matrix("utility_matrix")
     total_users = A.shape[1]
     total_books = A.shape[0]
 
-    #Load the list of books
+    # Load the list of books
     books_to_index = import_dic("books_to_index")
     index_to_books = import_dic("index_to_books")
 
@@ -40,19 +40,30 @@ def cv_item_based(books):
             print(book, "not found in database")
 
     # store the book index and score in a dic
-    # book_and_scores = {}
-    #run over all the books
+    book_and_scores = {}
+    # run over all the books
     for book in books_j:
         # take the vector of the book, each component is a rating from a user
-        book_vector = A[book,:]
-        _, users_idx, ratings = find(book_vector)
+        book_vector = A[:, book]
+        # see who read that book
+        _, users_idx, _ = find(book_vector)
+        for user_idx in users_idx:
+            user_vector = A[user_idx, :]
+            print(user_vector)
+            exit()
+
+
+
+
+
+
         user_rating_real = {}
         # create a dict of real ratings for the book
         for k in range(len(users_idx)):
             user_rating_real[users_idx[k]] = ratings[k]
 
         # calculate the similarity of books
-        similarity = cosine_similarity(A,book_vector, dense_output=False)
+        similarity = cosine_similarity(A, book_vector, dense_output=False)
         similarity_books_index, _, similarity_score = find(similarity)
 
         # select the top 6 books and store their local index of the previous array
@@ -61,10 +72,10 @@ def cv_item_based(books):
         # get the book index
         books_indices = similarity_books_index[ind]
 
-        #select the similarities ratings
+        # select the similarities ratings
         similarity_selected_books = similarity_score[ind]
 
-        #similarity dict of books with the book_j
+        # similarity dict of books with the book_j
         similarity_selected_books_dic = {}
         for k in range(len(similarity_selected_books)):
             similarity_selected_books_dic[books_indices[k]] = similarity_selected_books[k]
@@ -85,10 +96,13 @@ def cv_item_based(books):
                 sum_numerator = 0
                 sum_denominator = 0
                 for key in common_books_dic.keys():
-                    sum_numerator += common_books_dic[key]*similarity_selected_books_dic[key]
+                    sum_numerator += common_books_dic[key] * similarity_selected_books_dic[key]
                     sum_denominator += np.abs(similarity_selected_books_dic[key])
                 # add to the list the difference
-                all_differences_predicted_real_ratings.append((sum_numerator/sum_denominator-user_rating_real[user])**2)
-        print("RMSE of ", isbn_to_book[index_to_books[book]], ":",round(np.sqrt(np.mean(all_differences_predicted_real_ratings)), 1))
+                all_differences_predicted_real_ratings.append(
+                    (sum_numerator / sum_denominator - user_rating_real[user]) ** 2)
+        print("RMSE of ", isbn_to_book[index_to_books[book]], ":",
+              round(np.sqrt(np.mean(all_differences_predicted_real_ratings)), 1))
+
 
 
