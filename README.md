@@ -1,11 +1,3 @@
-# AMD-HW3
+This software gives book recommendations based on a data set of ratings 1.200.000 ratings from 279.000 users on 271.000 books. The algorithms used are collaborative filtering, item based, user based and association rules.
 
-## Running code
-
-1. To perform a cross validation run "python cross-validation-item-based.py"
-1. To get recommentions run "python item_based_similarity_matrix.py" or "python user_based_similarity_matrix.py"
-
-## About utility matrix
-
-In the utility_matrix scipy file the row i represents user i. In order to see who is user i, is possible to see using the np dict of the file index_to_users
-Same with books in the columns
+The different algorithms can be executed without arguments from the folder [recommender/test/](https://github.com/xsergiolpx/Books-Recommender-System/tree/master/recommender/test)
